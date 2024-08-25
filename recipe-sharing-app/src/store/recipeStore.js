@@ -1,18 +1,19 @@
-
+// src/components/recipeStore.js
 import { create } from 'zustand';
 
 const useRecipeStore = create((set) => ({
   recipes: [],
-  searchTerm: '',
-  filteredRecipes: [],
+  searchTerm: '', // Define the searchTerm in the store
 
   // Action to set the search term
-  setSearchTerm: (term) =>
+  setSearchTerm: (term) => 
     set((state) => {
       state.searchTerm = term;
       // Trigger the filtering whenever the search term changes
       state.filterRecipes();
     }),
+
+  filteredRecipes: [], // Define filteredRecipes in the store
 
   // Action to filter recipes based on the search term
   filterRecipes: () =>
@@ -22,8 +23,8 @@ const useRecipeStore = create((set) => ({
       ),
     })),
 
-  // AddRecipe and other existing actions
-  addRecipe: (newRecipe) =>
+  // Action to add a new recipe and update the filtered results
+  addRecipe: (newRecipe) => 
     set((state) => {
       state.recipes = [...state.recipes, newRecipe];
       state.filterRecipes(); // Filter recipes after adding a new one
