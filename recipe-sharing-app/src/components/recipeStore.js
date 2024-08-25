@@ -3,22 +3,28 @@ import { create } from 'zustand';
 
 const useRecipeStore = create((set) => ({
   recipes: [],
-  favorites: [], // Store for user favorites
-  recommendations: [], // Store for personalized recommendations
 
-  // Action to add a recipe to favorites
+  // Action to set the list of recipes
+  setRecipes: (recipes) => set({ recipes }),
+
+  // Action to add a new recipe
+  addRecipe: (newRecipe) => set((state) => ({
+    recipes: [...state.recipes, newRecipe],
+  })),
+
+  // Favorites management
+  favorites: [],
   addFavorite: (recipeId) =>
     set((state) => ({
       favorites: [...state.favorites, recipeId],
     })),
-
-  // Action to remove a recipe from favorites
   removeFavorite: (recipeId) =>
     set((state) => ({
       favorites: state.favorites.filter((id) => id !== recipeId),
     })),
 
-  // Action to generate recommendations (mock implementation)
+  // Recommendations generation (mock implementation)
+  recommendations: [],
   generateRecommendations: () =>
     set((state) => {
       const recommended = state.recipes.filter(
@@ -27,6 +33,21 @@ const useRecipeStore = create((set) => ({
       );
       return { recommendations: recommended };
     }),
+
+  // Search functionality
+  searchTerm: '',
+  setSearchTerm: (term) =>
+    set((state) => {
+      state.searchTerm = term;
+      state.filterRecipes(); // Filter recipes when search term changes
+    }),
+  filteredRecipes: [],
+  filterRecipes: () =>
+    set((state) => ({
+      filteredRecipes: state.recipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+      ),
+    })),
 }));
 
 export { useRecipeStore };
