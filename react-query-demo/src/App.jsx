@@ -2,9 +2,10 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
-import FormikForm from './components/formikForm';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import PostsComponent from './components/PostsComponent';
 
-
+const queryClient = new QueryClient();
 function App() {
   const [count, setCount] = useState(0)
 
@@ -19,11 +20,9 @@ function App() {
         </a>
       </div>
 
-      <div className="App">
-      <h1>Registration Form</h1>
-      <FormikForm />
-    </div>
-
+      <QueryClientProvider client={queryClient}>
+      <PostsComponent />
+    </QueryClientProvider>
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
