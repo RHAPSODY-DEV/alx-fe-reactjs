@@ -8,8 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-     "test": "jest",
-    "eject": "react-scripts eject"
+     "test": "jest"
     
   },
   "dependencies": {
