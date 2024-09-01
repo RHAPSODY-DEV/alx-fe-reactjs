@@ -25,24 +25,15 @@ function App() {
       <AuthProvider>
       <Router>
         <nav>
-          <Link to="/">Home</Link>
-          <Link to="/profile">Profile</Link>
-          <Link to="/post/1">Blog Post 1</Link>
+        <Link to="/">Home</Link>
+        <Link to="/profile">Profile</Link>
+        <Link to="/blog/1">Blog Post 1</Link>
         </nav>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/profile/*"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/post/:postId" element={<BlogPost />} />
-          <Route path="details" element={<ProfileDetails />} />
-          <Route path="settings" element={<ProfileSettings />} />
-        </Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile/*" element={<Profile />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+      </Routes>
       </Router>
     </AuthProvider>
       <h1>Vite + React</h1>
