@@ -1,30 +1,51 @@
 import React, { useState } from 'react';
 
 const AddRecipeForm = () => {
+  // State for form fields
   const [title, setTitle] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [steps, setSteps] = useState('');
-  const [error, setError] = useState('');
+
+  // State for errors
+  const [errors, setErrors] = useState({});
+
+  // Validation function
+  const validate = () => {
+    const newErrors = {};
+
+    if (!title) {
+      newErrors.title = 'Title is required';
+    }
+
+    if (!ingredients) {
+      newErrors.ingredients = 'Ingredients are required';
+    } else if (ingredients.split(',').length < 2) {
+      newErrors.ingredients = 'Please include at least two ingredients (comma-separated).';
+    }
+
+    if (!steps) {
+      newErrors.steps = 'Preparation steps are required';
+    } else if (steps.split('.').length < 2) {
+      newErrors.steps = 'Please include at least two steps (period-separated).';
+    }
+
+    return newErrors;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Simple validation
-    if (!title || !ingredients || !steps) {
-      setError('All fields are required');
+    const validationErrors = validate();
+    
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
-    if (ingredients.split(',').length < 2) {
-        setError('Please include at least two ingredients.');
-        return;
-      }
-      
 
-    // Split ingredients and steps into arrays (if needed for backend)
+    // If no errors, process the form submission
     const ingredientsArray = ingredients.split(',');
     const stepsArray = steps.split('.');
 
-    // Display form data (replace with logic to post the data to a server)
     const newRecipe = {
       title,
       ingredients: ingredientsArray,
@@ -33,52 +54,57 @@ const AddRecipeForm = () => {
 
     console.log('New Recipe:', newRecipe);
 
-    // Reset form fields after submission
+    // Reset form fields and errors after submission
     setTitle('');
     setIngredients('');
     setSteps('');
-    setError('');
+    setErrors({});
   };
 
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold text-center mb-6">Add a New Recipe</h1>
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        
+        {/* Title Field */}
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2" htmlFor="title">Recipe Title</label>
           <input
             id="title"
             type="text"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.title ? 'border-red-500' : ''}`}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+          {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
         </div>
 
+        {/* Ingredients Field */}
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2" htmlFor="ingredients">Ingredients (comma-separated)</label>
           <textarea
             id="ingredients"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.ingredients ? 'border-red-500' : ''}`}
             rows="4"
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
           ></textarea>
+          {errors.ingredients && <p className="text-red-500 text-sm mt-1">{errors.ingredients}</p>}
         </div>
 
+        {/* Preparation Steps Field */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2" htmlFor="steps">Preparation Steps (end each step with a period)</label>
+          <label className="block text-gray-700 font-bold mb-2" htmlFor="steps">Preparation Steps (period-separated)</label>
           <textarea
             id="steps"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.steps ? 'border-red-500' : ''}`}
             rows="4"
             value={steps}
             onChange={(e) => setSteps(e.target.value)}
           ></textarea>
+          {errors.steps && <p className="text-red-500 text-sm mt-1">{errors.steps}</p>}
         </div>
 
+        {/* Submit Button */}
         <div className="text-center">
           <button
             type="submit"
