@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
@@ -13,6 +14,11 @@ const HomePage = () => {
 
   return (
     <div className="container mx-auto py-8">
+      <Link to={`/recipe/${recipe.id}`}>
+  <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+    View Recipe
+  </button>
+</Link>
       <h1 className="text-3xl font-bold mb-6">Recipe Sharing Platform</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {recipes.map((recipe) => (
