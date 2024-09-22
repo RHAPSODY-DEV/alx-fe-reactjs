@@ -1,7 +1,9 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
+import Search from './components/Search';
+import { fetchUserData } from './services/githubService';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -9,14 +11,17 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState('');
 
-  const handleSearch = async () => {
+  const handleSearch = async (username) => {
+    setLoading(true);
+    setError('');
+    setUserData(null);
     try {
-      const response = await fetchGitHubUser(username);
+      const response = await fetchUserData(username);
       setUserData(response.data);
-      setError('');
-    } catch (error) {
-      setError('User not found or an error occurred');
-      setUserData(null);
+    } catch (err) {
+      setError('Looks like we can’t find the user');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,29 +39,23 @@ function App() {
       <h1>GitHub User Search</h1>
       {/* Search and display components will go here */}
     </div>
-      <div className="App">
+    <div className="App">
       <h1>GitHub User Search</h1>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter GitHub username"
-      />
-      <button onClick={handleSearch}>Search</button>
-
-      {error && <p>{error}</p>}
-      {userData && (
-        <div>
-          <h2>{userData.login}</h2>
-          <img src={userData.avatar_url} alt="User Avatar" width="100" />
-          <p>Followers: {userData.followers}</p>
-          <p>Following: {userData.following}</p>
-          <a href={userData.html_url} target="_blank" rel="noreferrer">
-            View Profile
-          </a>
+      <Search onSearch={handleSearch} />
+      {loading && <p>Loading...</p>}
+{error && <p>{error}</p>}
+{userData && (
+  <div>
+    <h2>{userData.login}</h2>
+    <img src={userData.avatar_url} alt="User Avatar" width="100" />
+    <p>Followers: {userData.followers}</p>
+    <p>Following: {userData.following}</p>
+    <a href={userData.html_url} target="_blank" rel="noreferrer">
+      View Profile
+    </a>
         </div>
       )}
-    </div>
+    </div>  
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
