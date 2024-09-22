@@ -43,8 +43,8 @@ function App() {
       <h1>GitHub User Search</h1>
       <Search onSearch={handleSearch} />
       {loading && <p>Loading...</p>}
-{error && <p>{error}</p>}
-{userData && (
+  {error && <p>{error}</p>}
+    {userData && (
   <div>
     <h2>{userData.login}</h2>
     <img src={userData.avatar_url} alt="User Avatar" width="100" />
