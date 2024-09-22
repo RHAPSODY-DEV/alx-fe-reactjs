@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-function Search({ onSearch }) {
+const Search = ({ onSearch }) => {
   const [username, setUsername] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username.trim()) {
-      onSearch(username);  // Pass the entered username to the parent component
+      onSearch(username); // Call the parent function with the username
     }
   };
 
@@ -21,6 +21,6 @@ function Search({ onSearch }) {
       <button type="submit">Search</button>
     </form>
   );
-}
+};
 
 export default Search;
