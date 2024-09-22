@@ -5,23 +5,13 @@ const Search = ({ onSearch }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchUserData = async (username) => {
-    const response = await fetch(`https://api.github.com/users/${username}`);
-    if (!response.ok) {
-      throw new Error('User not found');
-    }
-    const data = await response.json();
-    return data;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (username.trim()) {
       setLoading(true);
       setError(null);
       try {
-        const userData = await fetchUserData(username); // Fetch the user data
-        onSearch(userData); // Call the parent function with the user data
+        await onSearch(username); // Call the parent function with the username
       } catch (err) {
         setError('Looks like we cant find the user');
       } finally {
@@ -45,4 +35,15 @@ const Search = ({ onSearch }) => {
   );
 };
 
-export default Search;
+const UserProfile = ({ user }) => {
+  if (!user) return null;
+
+  return (
+    <div>
+      <img src={user.avatar_url} alt={`${user.login}'s avatar`} />
+      <h2>{user.login}</h2>
+    </div>
+  );
+};
+
+export { Search, UserProfile };
