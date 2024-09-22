@@ -13,7 +13,7 @@ const Search = ({ onSearch }) => {
       try {
         await onSearch(username); // Call the parent function with the username
       } catch (err) {
-        setError('Looks like we can’t find the user');
+        setError('Looks like we cant find the user');
       } finally {
         setLoading(false);
       }
